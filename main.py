@@ -18,31 +18,19 @@ tfidf_vectorizer_spilled = joblib.load('spilled_tfidf_vectorizer.bin')
 tfidf_vectorizer_node = joblib.load('node_tfidf_vectorizer.bin')
 
 # Title of your app
-st.markdown("<h1 style='color: blue;'>SQL Query Cost Predictor</h1>", unsafe_allow_html=True)
-
+st.markdown("<h1 style='text-align: center; color: GREEN;'>SQL Query Cost Predictor  📊 </h3>", unsafe_allow_html=True)
 
 # Text input for the user
 user_input = st.text_area('Enter your SQL query:')
 
-# Define a function to check if a given text is a SQL query
 def is_sql_query(text):
-    sql_patterns = [
-        r'\bSELECT\b.*?\bFROM\b',
-        r'\bINSERT INTO\b',
-        r'\bUPDATE\b',
-        r'\bDELETE\b.*?\bFROM\b',
-        r'\bCREATE TABLE\b',
-        r'\bALTER TABLE\b',
-        r'\bDROP TABLE\b',
-        r'\bINSERT OVERWRITE\b',
-        r'\bCOMPUTE STATS\b',
-        r'\bINVALIDATE METADATA\b',
-        r'\brefresh\b'
-    ]
-    
-    for pattern in sql_patterns:
-        if re.search(pattern, text, re.IGNORECASE):
-            return True
+    # Define a more comprehensive SQL query pattern
+    sql_pattern = r'\b(SELECT|INSERT\sINTO|UPDATE|DELETE|CREATE|ALTER|DROP|INSERT\sOVERWRITE|COMPUTE\sSTATS|INVALIDATE\sMETADATA|REFRESH|MERGE|EXEC)\b'
+
+    # Check if the text matches the SQL query pattern
+    if re.search(sql_pattern, text, re.IGNORECASE):
+        return True
+
     return False
 
 # Make predictions
@@ -101,31 +89,28 @@ if st.button('Predict'):
         predicted_bytes = cluster_names_bytes.get(y_pred_bytes[0], "Unknown")
 
         # Show the prediction
-        st.markdown("<h3 style='color: green;'>Duration</h3>", unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
-        col1.write(f'Prediction: {predicted_duration}')    
-        col2.markdown('* **Duration in range (seconds):** {}')
+        st.markdown("<h1 style='text-align: center;color: GREEN;'>Prediction</h1>", unsafe_allow_html=True)
 
-
-        st.markdown("<h3 style='color: green;'>CPU</h3>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
-        col1.write(f'Prediction: {predicted_cpu}')
-        col2.markdown('* **CPU in range:** {}')
 
-        st.markdown("<h3 style='color: green;'>Memory Spilled</h3>", unsafe_allow_html=True)
+        col1.markdown("### **Duration** ⏱️", unsafe_allow_html=True)
+        col1.write(f'Prediction: {predicted_duration}')
+
+        col2.markdown("### **CPU** 💻", unsafe_allow_html=True)
+        col2.write(f'Prediction: {predicted_cpu}')
+
         col1, col2 = st.columns(2)
+
+        col1.markdown("### **Memory Spilled** 💽", unsafe_allow_html=True)
         col1.write(f'Prediction: {predicted_spilled}')
-        col2.markdown('* **Memory Spilled in range:** {}')
 
-        st.markdown("<h3 style='color: green;'>Node Peak Memory</h3>", unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
-        col1.write(f'Prediction: {predicted_node}')
-        col2.markdown('* **Node Peak Memory in range:** {}')
+        col2.markdown("### **Node Peak Memory** 📈", unsafe_allow_html=True)
+        col2.write(f'Prediction: {predicted_node}')
 
-        st.markdown("<h3 style='color: green;'>Bytes Streamed</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: black;'>Bytes Streamed 💾 </h3>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         col1.write(f'Prediction: {predicted_bytes}')
-        col2.markdown('* **Bytes Streamed in range:** {}')
+        #col2.markdown('* **Bytes Streamed in range:** {}')
 
 
     else:
