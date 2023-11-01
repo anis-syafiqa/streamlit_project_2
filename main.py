@@ -107,8 +107,7 @@ if st.button('Predict'):
         col2.markdown("### **Node Peak Memory** 📈", unsafe_allow_html=True)
         col2.write(f'Prediction: {predicted_node}')
 
-        st.markdown("<h3 style='color: black;'>Bytes Streamed 💾 </h3>", unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
+        st.markdown("### **Bytes Streamed** 💾", unsafe_allow_html=True)        col1, col2 = st.columns(2)
         col1.write(f'Prediction: {predicted_bytes}')
         #col2.markdown('* **Bytes Streamed in range:** {}')
 
